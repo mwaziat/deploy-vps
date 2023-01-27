@@ -18,7 +18,7 @@ inputs:
 env: 
   DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
   DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-  DOCKER_IMAGE: liburanterus-admin-react
+  DOCKER_IMAGE: deploy-vps
   VPS_HOST: ${{ secrets.VPS_HOST }}
   VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
   PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
