@@ -1,9 +1,9 @@
-name: Deploy to vps
+name: Deploy to VPS
 
 on:
   pull_request:
     branches: 
-    - staging
+    - develop
 
 jobs:
   build:

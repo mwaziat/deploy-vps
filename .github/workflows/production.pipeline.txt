@@ -1,0 +1,88 @@
+name: production environment CI CD
+
+on: 
+  pull_request:
+    branches: 
+    - production
+env:
+  IMAGE_NAME: liburanterus-frontend-react
+  DOCKER_REPOSITORY: ${{ secrets.DOCKER_USERNAME }}
+  TAG: ${{ github.run_number }}
+  ENVIRONMENT: production
+  DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+  DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+  PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+  KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+  HOSTS: ${{ secrets.VPS_HOST }}
+  USERNAME: ${{ secrets.VPS_USERNAME }}
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run linting and unit tests
+      run: npm test
+
+    - name: Build React app
+      run: npm run build
+  
+  deploy:
+    runs-on: ubuntu-latest
+    
+    needs: build
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up SSH
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        # host: $HOSTS
+        # username: $USERNAME
+        # key: $PRIVATE_KEY
+        # port: 22
+        script: |
+          cd /var/www/$ENVIRONMENT/$IMAGE_NAME
+          git pull origin production
+          
+    - name: Build Docker image
+      run: docker build . --file Dockerfile --tag $DOCKER_REPOSITORY/$IMAGE_NAME:$ENVIRONMENT-$TAG
+
+    - name: Deploy with Docker Compose
+      run: |
+        docker-compose down
+        docker-compose up -d
+        
+    # - name: Set up SSH
+    #   run: |
+    #     echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ssh-key
+    #     chmod 600 ssh-key
+    #     echo "${{ secrets.SSH_KNOWN_HOSTS }}" >> ~/.ssh/known_hosts
+    #     ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
+
+    # - name: Deploy
+    #   run: |
+    #     scp -i ssh-key -r build/* "${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }}:/var/www/$IMAGE_NAME"
+    #     ssh -i ssh-key "${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }}" <<EOF
+    #     cd /var/www/$IMAGE_NAME
+    #     docker-compose up -d --build
+    #     EOF
