@@ -72,3 +72,24 @@ jobs:
         echo "IMAGE_TAG: $IMAGE_TAG"
 
         docker push $DOCKER_USERNAME/$DOCKER_IMAGE:$IMAGE_TAG
+    
+    - name: Transfer compose file to VPS
+      uses: appleboy/scp-action@main
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        source: docker-compose.yml
+        target: /var/www/app/$DOCKER_IMAGE
+
+    - name: SSH to VPS
+      uses: appleboy/ssh-action@main
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        script: |
+          cd /var/www/app/$DOCKER_IMAGE
+          docker-compose pull
+          docker-compose down ${{github.event.pull_request.base.ref}}
+          docker-compose up ${{github.event.pull_request.base.ref}} -d
