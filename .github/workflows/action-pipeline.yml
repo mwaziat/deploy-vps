@@ -5,16 +5,6 @@ on:
     branches: 
     - develop
 
-inputs:
-  image_tag:
-    description: 'The image tag to use for the Docker image.'
-    required: true
-    default: 'latest'
-    options:
-    - 'staging'
-    - 'development'
-    - 'production'
-
 env: 
   DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
   DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
@@ -26,13 +16,14 @@ env:
 
 
 jobs:
+
   build:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         node-version: [16.x]
-
+        
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
