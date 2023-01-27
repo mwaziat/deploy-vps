@@ -4,15 +4,29 @@ on:
   pull_request:
     branches: 
     - develop
+    - testing
+    - staging
+    - production
+
+env: 
+  DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+  DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+  DOCKER_IMAGE: deploy-vps
+  VPS_HOST: ${{ secrets.VPS_HOST }}
+  VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
+  PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+  KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+
 
 jobs:
+
   build:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         node-version: [16.x]
-
+        
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
@@ -28,3 +42,33 @@ jobs:
 
     - name: Build React app
       run: npm run build
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Build Docker image
+      run: |
+        IMAGE_TAG=${{github.event.pull_request.base.ref}}
+        if [ -z "$IMAGE_TAG" ]; then
+          IMAGE_TAG=latest
+        fi
+        echo "IMAGE_TAG: $IMAGE_TAG"
+
+        docker build . --file Dockerfile --tag $DOCKER_USERNAME/$DOCKER_IMAGE:$IMAGE_TAG
+
+    - name: Login to Docker Hub
+      run: |
+        echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
+    
+    - name: Push Image to Docker Hub
+      run: |
+        IMAGE_TAG=${{github.event.pull_request.base.ref}}
+        if [ -z "$IMAGE_TAG" ]; then
+          IMAGE_TAG=latest
+        fi
+        echo "IMAGE_TAG: $IMAGE_TAG"
+
+        docker push $DOCKER_USERNAME/$DOCKER_IMAGE:$IMAGE_TAG
