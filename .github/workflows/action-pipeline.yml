@@ -81,6 +81,9 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         source: docker-compose.yml
         target: /var/www/app/$DOCKER_IMAGE
+        script: 
+          whoami
+          echo ${{ secrets.PRIVATE_KEY }}
 
     - name: SSH to VPS
       uses: appleboy/ssh-action@master
