@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  liburanterus-admin-react:
+    container_name: liburanterus-admin-react
+    image: waziat/liburanterus-admin-react:latest
+    # build:
+    #   context: .
+    #   dockerfile: ./Dockerfile
+    ports: 
+      - 3011:3000
+    restart: always
+    networks:
+      - liburanterus-microservices-networks
+    working_dir: /user/app
+
+networks:
+  liburanterus-microservices-networks: 
+    name: 'liburanterus-microservices-networks'
