@@ -48,7 +48,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        IMAGE_TAG=${GITHUB_HEAD_REF}
+        IMAGE_TAG=${{github.event.pull_request.base.ref}}
         if [ -z "$IMAGE_TAG" ]; then
           IMAGE_TAG=latest
         fi
@@ -62,7 +62,7 @@ jobs:
     
     - name: Push Image to Docker Hub
       run: |
-        IMAGE_TAG=${GITHUB_HEAD_REF}
+        IMAGE_TAG=${{github.event.pull_request.base.ref}}
         if [ -z "$IMAGE_TAG" ]; then
           IMAGE_TAG=latest
         fi
