@@ -4,6 +4,9 @@ on:
   pull_request:
     branches: 
     - develop
+    - testing
+    - staging
+    - production
 
 env: 
   DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
