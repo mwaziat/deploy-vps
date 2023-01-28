@@ -105,10 +105,10 @@ jobs:
           fi
           echo "IMAGE_TAG: $IMAGE_TAG"
 
-          sudo docker-compose pull $DOCKER_USERNAME/$DOCKER_IMAGE:$IMAGE_TAG
+          sudo docker-compose build --no-cache --pull $IMAGE_TAG
           echo " docker-compose pull IMAGE_TAG: $IMAGE_TAG"
-          sudo docker-compose down ${{github.event.pull_request.base.ref}}
+          sudo docker-compose down $IMAGE_TAG
           echo " docker-compose down IMAGE_TAG: $IMAGE_TAG"
-          sudo docker-compose up ${{github.event.pull_request.base.ref}} -d
+          sudo docker-compose up $IMAGE_TAG -d
           echo " docker-compose up IMAGE_TAG: $IMAGE_TAG"
 
