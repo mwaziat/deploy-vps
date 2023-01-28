@@ -109,6 +109,6 @@ jobs:
           echo " docker-compose pull IMAGE_TAG: $IMAGE_TAG"
           sudo docker-compose down $IMAGE_TAG
           echo " docker-compose down IMAGE_TAG: $IMAGE_TAG"
-          sudo docker-compose up $IMAGE_TAG -d
+          sudo docker-compose up -d $IMAGE_TAG
           echo " docker-compose up IMAGE_TAG: $IMAGE_TAG"
 
