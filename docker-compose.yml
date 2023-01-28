@@ -1,14 +1,53 @@
 version: '3.7'
 
 services:
-  liburanterus-admin-react:
-    container_name: liburanterus-admin-react
-    image: waziat/liburanterus-admin-react:latest
+  develop:
+    container_name: deploy-vps-develop
+    image: waziat/deploy-vps:develop
     # build:
     #   context: .
     #   dockerfile: ./Dockerfile
     ports: 
-      - 3011:3000
+      - 3001:3000
+    restart: always
+    networks:
+      - liburanterus-microservices-networks
+    working_dir: /user/app
+  
+  testing:
+    container_name: deploy-vps-testing
+    image: waziat/deploy-vps:testing
+    # build:
+    #   context: .
+    #   dockerfile: ./Dockerfile
+    ports: 
+      - 3002:3000
+    restart: always
+    networks:
+      - liburanterus-microservices-networks
+    working_dir: /user/app
+
+  staging:
+    container_name: deploy-vps-staging
+    image: waziat/deploy-vps:staging
+    # build:
+    #   context: .
+    #   dockerfile: ./Dockerfile
+    ports: 
+      - 3003:3000
+    restart: always
+    networks:
+      - liburanterus-microservices-networks
+    working_dir: /user/app
+  
+  production:
+    container_name: deploy-vps-production
+    image: waziat/deploy-vps:production
+    # build:
+    #   context: .
+    #   dockerfile: ./Dockerfile
+    ports: 
+      - 3004:3000
     restart: always
     networks:
       - liburanterus-microservices-networks
