@@ -93,7 +93,12 @@ jobs:
         username: ${{ secrets.VPS_USERNAME }}
         password: ${{ secrets.VPS_PASSWORD }}
         script: |
+          whoami
+          ls -al
+
           cd /var/www/app/$DOCKER_IMAGE
-          docker-compose pull
-          docker-compose down ${{github.event.pull_request.base.ref}}
-          docker-compose up ${{github.event.pull_request.base.ref}} -d
+          ls
+
+          sudo docker-compose pull
+          sudo docker-compose down ${{github.event.pull_request.base.ref}}
+          sudo docker-compose up ${{github.event.pull_request.base.ref}} -d
