@@ -17,7 +17,7 @@ services:
   testing:
     container_name: deploy-vps-testing
     image: waziat/deploy-vps:testing
-    # build:
+    build: .
     #   context: .
     #   dockerfile: ./Dockerfile
     ports: 
@@ -30,7 +30,7 @@ services:
   staging:
     container_name: deploy-vps-staging
     image: waziat/deploy-vps:staging
-    # build:
+    build: .
     #   context: .
     #   dockerfile: ./Dockerfile
     ports: 
@@ -43,7 +43,7 @@ services:
   production:
     container_name: deploy-vps-production
     image: waziat/deploy-vps:production
-    # build:
+    build: .
     #   context: .
     #   dockerfile: ./Dockerfile
     ports: 
