@@ -105,10 +105,11 @@ jobs:
           fi
           echo "IMAGE_TAG: $IMAGE_TAG"
 
+          echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
+
           sudo docker-compose pull $IMAGE_TAG
-          echo " docker-compose pull IMAGE_TAG: $IMAGE_TAG"
+          
           sudo docker-compose down $IMAGE_TAG
-          echo " docker-compose down IMAGE_TAG: $IMAGE_TAG"
+
           sudo docker-compose up -d $IMAGE_TAG
-          echo " docker-compose up IMAGE_TAG: $IMAGE_TAG"
 
