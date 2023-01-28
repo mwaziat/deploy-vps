@@ -105,7 +105,7 @@ jobs:
           fi
           echo "IMAGE_TAG: $IMAGE_TAG"
 
-          sudo docker-compose build --no-cache --pull $IMAGE_TAG
+          sudo docker-compose pull $IMAGE_TAG
           echo " docker-compose pull IMAGE_TAG: $IMAGE_TAG"
           sudo docker-compose down $IMAGE_TAG
           echo " docker-compose down IMAGE_TAG: $IMAGE_TAG"
