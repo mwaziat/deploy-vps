@@ -99,6 +99,12 @@ jobs:
           cd /var/www/app/$DOCKER_IMAGE
           ls
 
-          sudo docker-compose pull
+          IMAGE_TAG=${{github.event.pull_request.base.ref}}
+          if [ -z "$IMAGE_TAG" ]; then
+            IMAGE_TAG=latest
+          fi
+          echo "IMAGE_TAG: $IMAGE_TAG"
+
+          sudo docker-compose pull $DOCKER_USERNAME/$DOCKER_IMAGE:${{github.event.pull_request.base.ref}}
           sudo docker-compose down ${{github.event.pull_request.base.ref}}
           sudo docker-compose up ${{github.event.pull_request.base.ref}} -d
