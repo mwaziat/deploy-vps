@@ -6,11 +6,19 @@ COPY package*.json ./
 
 COPY . ./
 
-RUN npm install
-RUN npm run build
+# RUN npm install
+RUN npm install --no-optional && npm cache clean --force
+# RUN npm run build
+#ARG
+ARG NODE_ENV=development
+
+ENV NODE_ENV $NODE_ENV
+
+RUN if [ "$NODE_ENV" = "development" ]; then npm run build; elif [ "$NODE_ENV" = "testing" ]; then npm run build:testing; elif [ "$NODE_ENV" = "staging" ]; then npm run build:staging; elif [ "$NODE_ENV" = "production" ]; then npm run build; fi
 
 ENV PORT=3000
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD if [ "$NODE_ENV" = "development" ]; then npm start; elif [ "$NODE_ENV" = "testing" ]; then npx serve -s build; elif [ "$NODE_ENV" = "staging" ]; then npx serve -s build; elif [ "$NODE_ENV" = "production" ]; then npx serve -s build; fi
+# CMD ["npm", "start"]
