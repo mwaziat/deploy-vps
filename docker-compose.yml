@@ -4,10 +4,6 @@ services:
   develop:
     container_name: deploy-vps-develop
     image: waziat/deploy-vps:develop
-    build:
-      context: .
-      args:
-        NODE_ENV: develop
     environment:
       - NODE_ENV=development
     ports: 
@@ -20,10 +16,6 @@ services:
   testing:
     container_name: deploy-vps-testing
     image: waziat/deploy-vps:testing
-    build:
-      context: .
-      args:
-        NODE_ENV: testing
     environment:
       - NODE_ENV=testing
     ports: 
@@ -36,10 +28,6 @@ services:
   staging:
     container_name: deploy-vps-staging
     image: waziat/deploy-vps:staging
-    build:
-      context: .
-      args:
-        NODE_ENV: staging
     environment:
       - NODE_ENV=staging
     ports: 
@@ -52,10 +40,6 @@ services:
   production:
     container_name: deploy-vps-production
     image: waziat/deploy-vps:production
-    build:
-      context: .
-      args:
-        NODE_ENV: production
     environment:
       - NODE_ENV=production
     ports: 
