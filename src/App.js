@@ -12,6 +12,7 @@ function App() {
           <h1>This DepOps</h1>
           <h2>This Heading 2</h2>
           <h3>This Heading 3 Untuk terbaru test</h3>
+          <h3>Hello {process.env.REACT_APP_ENVIRONMENT_LOCATION}</h3>
         </p>
         <a
           className="App-link"
