@@ -81,7 +81,7 @@ jobs:
         username: ${{ secrets.VPS_USERNAME }}
         password: ${{ secrets.VPS_PASSWORD }}
         source: docker-compose.yml
-        target: /var/www/app/$DOCKER_IMAGE
+        target: /var/www/app/deploy-vps
         script: 
           whoami
           echo ${{ secrets.PRIVATE_KEY }}
