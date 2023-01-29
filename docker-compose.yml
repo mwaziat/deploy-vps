@@ -19,7 +19,7 @@ services:
     image: waziat/deploy-vps:testing
     build: .
     environment:
-      - NODE_ENV=test
+      - NODE_ENV=testing
     ports: 
       - 3002:3000
     restart: always
