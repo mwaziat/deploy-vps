@@ -16,6 +16,9 @@ services:
   testing:
     container_name: deploy-vps-testing
     image: waziat/deploy-vps:testing
+    # build: 
+    #   context: .
+    #   dockerfile: ./Dockerfile
     environment:
       - NODE_ENV=testing
     ports: 
