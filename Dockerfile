@@ -8,7 +8,8 @@ COPY . ./
 
 # RUN npm install
 RUN npm install --no-optional && npm cache clean --force
-RUN npm run build
+# RUN npm run build
+RUN if [ "$NODE_ENV" = "testing" ]; then npm run build:testing; elif [ "$NODE_ENV" = "staging" ]; then npm run build:staging; elif [ "$NODE_ENV" = "production" ]; then npm run build; fi
 
 ENV PORT=3000
 
@@ -16,5 +17,5 @@ EXPOSE 3000
 
 ARG NODE_ENV=development
 
-CMD if [ "$NODE_ENV" = "development" ]; then npm start; elif [ "$NODE_ENV" = "testing" ]; then npm run build:testing; elif [ "$NODE_ENV" = "staging" ]; then npm run build:staging; elif [ "$NODE_ENV" = "production" ]; then serve -s build; fi
+CMD if [ "$NODE_ENV" = "development" ]; then npm start; elif [ "$NODE_ENV" = "testing" ]; then serve -s build; elif [ "$NODE_ENV" = "staging" ]; then serve -s build; elif [ "$NODE_ENV" = "production" ]; then serve -s build; fi
 # CMD ["npm", "start"]
