@@ -20,5 +20,5 @@ ENV PORT=3000
 
 EXPOSE 3000
 
-CMD if [ "$NODE_ENV" = "development" ]; then npm start; elif [ "$NODE_ENV" = "testing" ]; then serve -s build; elif [ "$NODE_ENV" = "staging" ]; then serve -s build; elif [ "$NODE_ENV" = "production" ]; then serve -s build; fi
+CMD if [ "$NODE_ENV" = "development" ]; then npm start; elif [ "$NODE_ENV" = "testing" ]; then npx serve -s build; elif [ "$NODE_ENV" = "staging" ]; then npx serve -s build; elif [ "$NODE_ENV" = "production" ]; then npx serve -s build; fi
 # CMD ["npm", "start"]
