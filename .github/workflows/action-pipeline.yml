@@ -58,7 +58,7 @@ jobs:
         fi
         echo "IMAGE_TAG: $IMAGE_TAG"
 
-        docker build . --file Dockerfile --tag $DOCKER_USERNAME/$DOCKER_IMAGE:$IMAGE_TAG
+        docker build . --file Dockerfile --tag $DOCKER_USERNAME/$DOCKER_IMAGE:$IMAGE_TAG --build-arg NODE_ENV=$IMAGE_TAG
 
     - name: Login to Docker Hub
       run: |
@@ -105,10 +105,13 @@ jobs:
           fi
           echo "IMAGE_TAG: $IMAGE_TAG"
 
-          sudo docker-compose pull $IMAGE_TAG
-          echo " docker-compose pull IMAGE_TAG: $IMAGE_TAG"
-          sudo docker-compose down $IMAGE_TAG
-          echo " docker-compose down IMAGE_TAG: $IMAGE_TAG"
-          sudo docker-compose up -d $IMAGE_TAG
-          echo " docker-compose up IMAGE_TAG: $IMAGE_TAG"
+          echo "sudo docker-compose pull $IMAGE_TAG"
 
+          sudo docker-compose pull $IMAGE_TAG
+          
+          echo "sudo docker-compose down $IMAGE_TAG"
+          sudo docker-compose down $IMAGE_TAG
+
+          sudo docker-compose up -d $IMAGE_TAG
+
+    # sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
