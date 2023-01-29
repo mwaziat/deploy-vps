@@ -81,7 +81,7 @@ jobs:
         username: ${{ secrets.VPS_USERNAME }}
         password: ${{ secrets.VPS_PASSWORD }}
         source: docker-compose.yml
-        target: /var/www/app/$DOCKER_IMAGE
+        target: /var/www/app/deploy-vps
         script: 
           whoami
           echo ${{ secrets.PRIVATE_KEY }}
@@ -106,12 +106,10 @@ jobs:
           echo "IMAGE_TAG: $IMAGE_TAG"
 
           echo "sudo docker-compose pull $IMAGE_TAG"
-
           sudo docker-compose pull $IMAGE_TAG
           
-          echo "sudo docker-compose down $IMAGE_TAG"
-          sudo docker-compose down $IMAGE_TAG
-
           sudo docker-compose up -d $IMAGE_TAG
 
+    # echo "sudo docker-compose down $IMAGE_TAG"
+    # sudo docker-compose down $IMAGE_TAG
     # sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
